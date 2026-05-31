@@ -81,9 +81,9 @@ def preprocess_ohlcv(df):
     df = df.sort_values("timestamps").reset_index(drop=True)
 
     # Forward fill missing values
-    df = df.fillna(method="ffill")
+    df = df.ffill()
     # Backward fill any remaining NaNs at the beginning
-    df = df.fillna(method="bfill")
+    df = df.bfill()
 
     price_cols = ["open", "high", "low", "close"]
     # Check if we have all necessary columns
