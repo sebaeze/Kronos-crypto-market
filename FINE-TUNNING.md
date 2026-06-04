@@ -6,6 +6,53 @@ By bypassing the complex Microsoft Qlib requirement, this setup allows you to tr
 
 ---
 
+## Phase 0: Local Data Preparation (Run Before Moving to GCP)
+
+Before uploading anything to the cloud, use the script `finetune_csv/data/convertJsonToDataset.py` to convert your raw Binance JSON candle files into a single, clean CSV dataset on your local machine.
+
+### Prerequisites
+
+Make sure you have the required Python packages installed:
+
+```bash
+pip install pandas
+```
+
+### Configuration
+
+Open `finetune_csv/data/convertJsonToDataset.py` and update the two parameters at the bottom of the file to match your local paths:
+
+```python
+build_kronos_dataset_from_folder(
+    target_folder='C:\\path\\to\\your\\candles\\OPNUSDT\\1m',  # Folder with .json files
+    output_csv_path='kronos_combined_1m_training_data.csv'      # Output CSV path
+)
+```
+
+### Running the Script
+
+From the root of the repository, run:
+
+```bash
+python finetune_csv/data/convertJsonToDataset.py
+```
+
+On success you will see output like:
+
+```
+Found 12 JSON files. Starting batch processing...
+ [+] Processed: OPNUSDT_1m_2026-03-16.json (1440 rows)
+ ...
+Merging data...
+SUCCESS: Exported 17280 chronological rows to 'kronos_combined_1m_training_data.csv'
+```
+
+> **Note:** The `volume` column is intentionally set to `0` in the output CSV. Kronos is trained on OHLC price structure; volume data is zeroed out to avoid scale interference during fine-tuning.
+
+Once the CSV is generated, upload it to your GCP Cloud Storage bucket before proceeding with the cloud phases below.
+
+---
+
 ## Phase 1: Setting up Google Cloud Platform (GCP)
 
 1. **Create a Project:** Go to the [Google Cloud Console](https://console.cloud.google.com/), click the project dropdown at the top left, and create a **New Project** (e.g., `Kronos-Training`).
