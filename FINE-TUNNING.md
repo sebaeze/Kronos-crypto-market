@@ -83,19 +83,24 @@ Inside your JupyterLab workspace:
 1. Open a **Terminal** window (File > New > Terminal).
 2. Clone your repository:
    ```bash
-   git clone [https://github.com/sebaeze/Kronos-crypto-market](https://github.com/sebaeze/Kronos-crypto-market)
+   git clone https://github.com/sebaeze/Kronos-crypto-market
    cd Kronos-crypto-market
    ```
-3. Install required dependencies:
+3. Switch to the custom fine-tuning branch (do **not** use `master`):
+   ```bash
+   git checkout cgp_cloud_opnusdt
+   ```
+   > **Why?** The `master` branch contains the general codebase. The `cgp_cloud_opnusdt` branch holds the OPNUSDT-specific `finetune/config.py`, the prepared CSV dataset, and all cloud-training adjustments. Always train from this branch.
+4. Install required dependencies:
    ```bash
    pip install -r requirements.txt
    pip install comet_ml
    ```
-4. Set your Python path so the training scripts can find the model architecture:
+5. Set your Python path so the training scripts can find the model architecture:
    ```bash
    export PYTHONPATH=$PWD
    ```
-5. **Upload your Data:** In the left-hand file browser, navigate into `Kronos-crypto-market`. Create a folder named `raw_data` and drag-and-drop your 1-minute JSON files from your computer into this folder.
+6. **Upload your Data:** In the left-hand file browser, navigate into `Kronos-crypto-market`. Upload the CSV file generated in **Phase 0** (`finetune_csv/data/kronos_combined_1m_training_data.csv`) — no raw JSON processing is needed on the cloud.
 
 ---
 
@@ -316,12 +321,12 @@ Downloading large `.safetensors` files directly through the JupyterLab browser c
 
 1. Zip your trained models:
    ```bash
-   zip -r my_trained_kronos.zip ./output_models
+   zip -r trained_model_opnusdt.zip ./output_models
    ```
 2. Create a storage bucket in your GCP console (e.g., `my-kronos-bucket`).
 3. Upload the zip directly via terminal:
    ```bash
-   gsutil cp my_trained_kronos.zip gs://my-kronos-bucket/
+   gsutil cp  trained_model_opnusdt.zip  gs://my-kronos-bucket/
    ```
 4. Navigate to **Cloud Storage** in your Google Cloud Console and download the `.zip` file to your local machine.
 

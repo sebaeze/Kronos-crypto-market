@@ -24,6 +24,34 @@ def process_single_json(file_path):
 
     return result
 
+def split_on_structural_breaks(df, price_jump_threshold=0.10, min_segment_len=512):
+    """
+    Splits a DataFrame into valid continuous sub-segments based on the 
+    Price Jump Threshold (Theta_jump) and discards short segments.
+    """
+    df = df.sort_values(by='timestamps').reset_index(drop=True)
+    
+    # Calculate price jump: |open_t / close_{t-1} - 1|
+    prev_close = df['close'].shift(1)
+    relative_jump = (df['open'] / prev_close - 1).abs()
+    
+    # Flag rows where a jump occurs (excluding the first row)
+    jump_mask = (relative_jump > price_jump_threshold) & (df.index > 0)
+    
+    # Assign group IDs based on cumulative sum of breaks
+    df['segment_id'] = jump_mask.cumsum()
+    
+    # Filter out segments that do not meet the minimum length
+    valid_segments = []
+    for seg_id, group in df.groupby('segment_id'):
+        if len(group) >= min_segment_len:
+            valid_segments.append(group.drop(columns=['segment_id']))
+            
+    if not valid_segments:
+        return pd.DataFrame(columns=[c for c in df.columns if c != 'segment_id'])
+        
+    return pd.concat(valid_segments, ignore_index=True)
+
 def build_kronos_dataset_from_folder(target_folder, output_csv_path):
     """Iterates through a directory of JSONs to build a unified time-series dataset."""
     folder_path = Path(target_folder)
@@ -66,6 +94,14 @@ def build_kronos_dataset_from_folder(target_folder, output_csv_path):
     
     if duplicates_removed > 0:
         print(f"Removed {duplicates_removed} duplicate timestamps due to overlapping files.")
+
+    # CRITICAL: Filter out segments with structural breaks > 10%
+    print("Applying structural break segmentation filter...")
+    initial_len = len(master_df)
+    master_df = split_on_structural_breaks(master_df, price_jump_threshold=0.10, min_segment_len=512)
+    filtered_out = initial_len - len(master_df)
+    if filtered_out > 0:
+        print(f"Filtered out {filtered_out} rows due to structural breaks or insufficient segment length.")
 
     # Export the final clean dataset
     master_df.to_csv(output_csv_path, index=False)
