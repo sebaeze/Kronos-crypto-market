@@ -17,7 +17,12 @@ def process_single_json(file_path):
     df['timestamps'] = pd.to_datetime(df['openTime'], unit='ms')
 
     # 3. Filter down to strictly what KronosPredictor requires
-    return df[['timestamps', 'open', 'high', 'low', 'close', 'volume']]
+    result = df[['timestamps', 'open', 'high', 'low', 'close', 'volume']].copy()
+
+    # 4. Zero out volume field
+    result['volume'] = 0
+
+    return result
 
 def build_kronos_dataset_from_folder(target_folder, output_csv_path):
     """Iterates through a directory of JSONs to build a unified time-series dataset."""
@@ -69,6 +74,6 @@ def build_kronos_dataset_from_folder(target_folder, output_csv_path):
 # Execute the pipeline
 # Replace './my_json_folder' with the path to your actual folder containing the JSONs
 build_kronos_dataset_from_folder(
-    target_folder='C:\\00 - GITHUB\\volume-usdt-batch\\candles\\historical_futures\\GUAUSDT\\1m', 
+    target_folder='C:\\00 - GITHUB\\volume-usdt-batch\\candles\\historical_futures\\OPNUSDT\\1m', 
     output_csv_path='kronos_combined_1m_training_data.csv'
 )

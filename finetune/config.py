@@ -13,7 +13,7 @@ class Config:
         # Set to the GCS mounted directory where your CSV file is located.
         # Note: If you are bypassing Qlib, ensure your dataset loader expects this CSV.
         self.dataset_path = "/gcs/kronos-1m-workspace/dataset/kronos_combined_1m_training_data.csv"
-        self.instrument = 'GUAUSDT'
+        self.instrument = 'OPNUSDT'
 
         # Set a broad time range that encompasses your 2026 data
         self.dataset_begin_time = "2026-03-16"
@@ -73,4 +73,4 @@ class Config:
         self.inference_top_k = 0
         self.inference_sample_count = 5
         self.backtest_batch_size = 1000
-        self.backtest_benchmark = "GUAUSDT"
+        self.backtest_benchmark = "OPNUSDT"

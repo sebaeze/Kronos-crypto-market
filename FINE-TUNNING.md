@@ -90,7 +90,7 @@ def build_kronos_dataset_from_folder(target_folder, output_csv_path):
     master_df.to_csv(output_csv_path, index=False)
     print(f"SUCCESS: Exported {len(master_df)} rows to {output_csv_path}")
 
-build_kronos_dataset_from_folder('./raw_data', './dataset/guausdt_1m.csv')
+build_kronos_dataset_from_folder('./raw_data', './dataset/opnusdt_1m.csv')
 ```
 3. Run the script in your terminal:
    ```bash
@@ -118,8 +118,8 @@ class Config:
         self.n_valid_iter = 200       
         
         # --- Paths and Instrument ---
-        self.dataset_path = "./dataset/guausdt_1m.csv"
-        self.instrument = 'GUAUSDT'
+        self.dataset_path = "./dataset/opnusdt_1m.csv"
+        self.instrument = 'opnusdt'
         self.dataset_begin_time = "2020-01-01"
         self.dataset_end_time = '2030-01-01'
 
@@ -151,7 +151,7 @@ class Config:
 
         # --- Extras ---
         self.use_comet = False      
-        self.backtest_benchmark = "GUAUSDT"
+        self.backtest_benchmark = "opnusdt"
 ```
 
 ---
