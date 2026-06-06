@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y git zip curl gnupg && \
 WORKDIR /workspace
 
 # Clone the custom training branch
-RUN git clone -b cgp_cloud_opnusdt https://github.com/sebaeze/Kronos-crypto-market .
+RUN git clone -b cgp_cloud_bnbusdt https://github.com/sebaeze/Kronos-crypto-market .
 
 # Install Python requirements
 RUN pip install --no-cache-dir -r requirements.txt comet_ml pandas google-cloud-storage

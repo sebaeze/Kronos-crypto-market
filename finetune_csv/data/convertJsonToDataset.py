@@ -20,7 +20,7 @@ def process_single_json(file_path):
     result = df[['timestamps', 'open', 'high', 'low', 'close', 'volume']].copy()
 
     # 4. Zero out volume field
-    result['volume'] = 0
+    ## result['volume'] = 0
 
     return result
 
@@ -110,6 +110,6 @@ def build_kronos_dataset_from_folder(target_folder, output_csv_path):
 # Execute the pipeline
 # Replace './my_json_folder' with the path to your actual folder containing the JSONs
 build_kronos_dataset_from_folder(
-    target_folder='C:\\00 - GITHUB\\volume-usdt-batch\\candles\\historical_futures\\OPNUSDT\\1m', 
+    target_folder='C:\\00 - GITHUB\\volume-usdt-batch\\candles\\historical_futures\\BNBUSDT\\1m', 
     output_csv_path='kronos_combined_1m_training_data.csv'
 )

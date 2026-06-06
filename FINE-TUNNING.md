@@ -88,9 +88,9 @@ Inside your JupyterLab workspace:
    ```
 3. Switch to the custom fine-tuning branch (do **not** use `master`):
    ```bash
-   git checkout cgp_cloud_opnusdt
+   git checkout cgp_cloud_bnbusdt
    ```
-   > **Why?** The `master` branch contains the general codebase. The `cgp_cloud_opnusdt` branch holds the OPNUSDT-specific `finetune/config.py`, the prepared CSV dataset, and all cloud-training adjustments. Always train from this branch.
+   > **Why?** The `master` branch contains the general codebase. The `cgp_cloud_bnbusdt` branch holds the OPNUSDT-specific `finetune/config.py`, the prepared CSV dataset, and all cloud-training adjustments. Always train from this branch.
 4. Install required dependencies:
    ```bash
    pip install -r requirements.txt
